@@ -1,6 +1,6 @@
 export const getFormattedDate = (date) => {
     let parsedDate = new Date(date);
-    return `${parsedDate.getFullYear()}-${parsedDate.getMonth() + 1}-${parsedDate.getDate()}`
+    return `${parsedDate.getFullYear()}-${parsedDate.getMonth() + 1}-${parsedDate.getDate() + 1}`
 }
 
 export const getDateMinusDays = (date, days) => {
