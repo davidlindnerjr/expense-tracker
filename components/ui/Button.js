@@ -19,7 +19,8 @@ export default Button
 const styles = StyleSheet.create({
     button: {
         borderRadius: 4,
-        padding: 8,
+        paddingHorizontal: 45,
+        paddingVertical: 8,
         backgroundColor: GlobalStyles.colors.foreground,
     },
     flat: {
@@ -36,5 +37,17 @@ const styles = StyleSheet.create({
         opacity: 0.75,
         backgroundColor: GlobalStyles.colors.icon,
         borderRadius: 4,
+    },
+    button: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    deleteContainer: {
+        marginTop: 16,
+        paddingTop: 8,
+        borderTopWidth: 2,
+        borderTopColor: GlobalStyles.colors.foreground,      
+        alignItems: 'center',            
     }
 });
