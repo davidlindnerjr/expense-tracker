@@ -7,7 +7,7 @@ const expenseSlice = createSlice({
     },
     reducers: {
         addExpense: (state, action) => {
-            state.values.push(action.payload);  
+            state.values.push(action.payload); 
         },
         removeExpense: (state, action) => {
             state.values.splice(state.values.indexOf(action.payload.id), 1);
