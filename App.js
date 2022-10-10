@@ -1,10 +1,13 @@
-import { StyleSheet, Text, View, StatusBar } from 'react-native';
+import { StyleSheet, StatusBar, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { GlobalStyles } from './constants/styles';
 import { Ionicons } from '@expo/vector-icons';
-import {  Provider } from 'react-redux';
+import {  Provider, useDispatch, useSelector } from 'react-redux';
+
+// Redux
+import { userLogout } from './redux/user_reducer';
 
 // State
 import { store } from './redux/expense_store'
@@ -16,11 +19,14 @@ const BottomTabs = createBottomTabNavigator();
 import ManageExpense from './screens/ManageExpense';
 import RecentExpenses from './screens/RecentExpenses';
 import AllExpenses from './screens/AllExpenses';
+import LoginScreen from './screens/LoginScreen';
+import SignUpScreen from './screens/SignUpScreen';
 
 // Components
 import IconButton from './components/ui/IconButton';
 
 const ExpensesOverview = () => {
+  const dispatch = useDispatch();
   return (
     <BottomTabs.Navigator screenOptions={({navigation}) => ({ 
       headerStyle: {
@@ -34,8 +40,17 @@ const ExpensesOverview = () => {
       tabBarInactiveTintColor: GlobalStyles.colors.foreground,
       headerRight: ({ tintColor }) => {
         return <IconButton icon="add" size={24} color={tintColor} onPress={()=>{navigation.navigate('ManageExpense')}}/>
+      }, headerLeft: ({ tintColor }) => {
+        return <IconButton icon="log-out-outline" size={24} color={tintColor} onPress={()=>{ 
+          dispatch(userLogout({
+            token: null, 
+            isAuthenticated: false, 
+            userEmail: null, 
+            userPassword: null,
+          })); 
+        }}/>
       }
-     })}>
+    })}>
       <BottomTabs.Screen 
         name='RecentExpenses' 
         component={RecentExpenses} 
@@ -59,29 +74,58 @@ const ExpensesOverview = () => {
   );
 }
 
+const AuthStack = () => {
+    return <Stack.Navigator
+        screenOptions={{
+          headerStyle: { backgroundColor: GlobalStyles.colors.background },
+          headerTintColor: GlobalStyles.colors.text,
+          contentStyle: { backgroundColor: GlobalStyles.colors.background },
+        }}
+      >
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="SignUp" component={SignUpScreen} />
+    </Stack.Navigator>
+}
+
+const AuthenticatedStack = () => {
+  return <Stack.Navigator screenOptions={{
+      headerStyle: {
+      backgroundColor: GlobalStyles.colors.background,
+  },
+    headerTintColor: 'white'
+  }}>
+    <Stack.Screen 
+      name='ExpensesOverview' 
+      component={ExpensesOverview} 
+      options={{ headerShown: false, style: styles.removeBorder}}
+    />
+    <Stack.Screen name='ManageExpense' component={ManageExpense}  options={{
+      presentation: 'modal'
+    }}/>
+  </Stack.Navigator>
+}
+
+const Navigation = () => {
+  const userAuth = useSelector(((state) => state.user.values.isAuthenticated));
+
+  return (
+    <>
+    {!userAuth && <AuthStack />}
+    {userAuth && <AuthenticatedStack />}
+   </>
+  );
+}
+
 const App = () => {
+  
   return (
    <>
     <StatusBar barStyle="light-content" />
-    <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{
-          headerStyle: {
-            backgroundColor: GlobalStyles.colors.background,
-          },
-          headerTintColor: 'white'
-        }}>
-          <Stack.Screen 
-            name='ExpensesOverview' 
-            component={ExpensesOverview} 
-            options={{ headerShown: false, style: styles.removeBorder}}
-          />
-          <Stack.Screen name='ManageExpense' component={ManageExpense}  options={{
-            presentation: 'modal'
-          }}/>
-        </Stack.Navigator>
-      </NavigationContainer>
+    <NavigationContainer>
+      <Provider store={store}>
+        <Navigation />
       </Provider>
+    </NavigationContainer>
    </>
   );
 }

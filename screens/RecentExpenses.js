@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import ExpensesOutput from '../components/Expenses/ExpensesOutput';
 import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
 
 // util
 import { getDateMinusDays } from '../util/date';
@@ -19,12 +20,15 @@ const RecentExpenses = () => {
   const [errorMessage, setErrorMessage] = useState(null);
 
   const dispatch = useDispatch();
+  const getExpenses = useSelector((state) => state.expenses.values);
+  const currUserId = useSelector((state) => state.user.values.userId);
 
   useEffect(() => {
+
     const fetchAllExpenses = async () => {
       setLoading(true);
       try {
-        const expenses = await fetchExpensesHttp();
+        const expenses = await fetchExpensesHttp(currUserId);
         dispatch(setExpenses(expenses));
       } catch (err) {
         setErrorMessage(err);
@@ -33,8 +37,6 @@ const RecentExpenses = () => {
     }
     fetchAllExpenses();
   }, [])
-
-  const getExpenses = useSelector((state) => state.expenses.values);
 
   const recentExpenses = getExpenses.filter((expense) => {
     const today = new Date();

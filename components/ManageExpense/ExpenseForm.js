@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
+import { useSelector } from 'react-redux';
 
 // Constants
 import { GlobalStyles } from '../../constants/styles';
@@ -9,6 +10,8 @@ import Input from './Input';
 import Button from '../ui/Button';
 
 const ExpenseForm = ({onCancel, onSubmit, submitButtonLabel, defaultValues}) => {
+
+    const currUserID = useSelector((state) => state.user.values.userId);
 
     const [inputValues, setInputValues] = useState({
         amount: defaultValues ? defaultValues.amount.toString() : '',
@@ -43,6 +46,7 @@ const ExpenseForm = ({onCancel, onSubmit, submitButtonLabel, defaultValues}) => 
             return;
         } else {
             const expenseData = {
+                userId: currUserID,
                 amount: +inputValues.amount,
                 date: getFormattedDate(inputValues.date),
                 description: inputValues.description,
