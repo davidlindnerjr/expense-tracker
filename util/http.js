@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const URL = 'https://expense-tracker-ddebb-default-rtdb.firebaseio.com';
 
@@ -9,14 +10,15 @@ export const storeExpenseHttp = async (expenseData) =>  {
     return id;
 }
 
-export const fetchExpensesHttp = async () => {
+export const fetchExpensesHttp = async (userId) => {
     try {
-        const response = await axios.get(`${URL}/expenses.json`);
-
+        const response = await axios.get(`${URL}/expenses.json?auth`);
         const expenses = [];
+        const currUserExpenses = [];
 
         for(let key in response.data) {
             const expenseObj = {
+                userId: response.data[key].userId,
                 id: key,
                 amount: response.data[key].amount,
                 date: response.data[key].date,
@@ -25,8 +27,13 @@ export const fetchExpensesHttp = async () => {
 
             expenses.push(expenseObj);
         }
+        for(let ex in expenses) {
+            if(expenses[ex].userId === userId) {
+                currUserExpenses.push(expenses[ex]);
+            }
+        }
 
-        return expenses;
+        return currUserExpenses;
     } catch (err) {
         console.log(err);
     }

@@ -19,6 +19,7 @@ const ManageExpense = ({ route, navigation }) => {
   const editExpenseId = route.params?.expenseId;
   const dispatch = useDispatch();
   const getExpenses = useSelector((state) => state.expenses.values);
+  const currUserId = useSelector((state) => state.user.values.userId);
   const selectedExpense = getExpenses.find(expense => expense.id === editExpenseId);
 
   // Converts to boolean
@@ -52,6 +53,7 @@ const ManageExpense = ({ route, navigation }) => {
     setLoading(true);
     if(isEditing) {
       dispatch(updateExpense({
+        userId: currUserId,
         id: editExpenseId,
         description: expenseData.description,
         amount: expenseData.amount,
@@ -71,6 +73,7 @@ const ManageExpense = ({ route, navigation }) => {
         const firebaseId = await storeExpenseHttp(expenseData);
         // Store in Redux State
         dispatch(addExpense({
+          userId: currUserId,
           id: firebaseId,
           description: expenseData.description,
           amount: expenseData.amount,
