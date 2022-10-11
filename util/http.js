@@ -1,10 +1,9 @@
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { FIREBASE_REALTIME_API } from '@env';
 
-const URL = 'https://expense-tracker-ddebb-default-rtdb.firebaseio.com';
 
 export const storeExpenseHttp = async (expenseData) =>  {
-    const response = await axios.post(`${URL}/expenses.json`, expenseData);
+    const response = await axios.post(`${FIREBASE_REALTIME_API}/expenses.json`, expenseData);
     // holds the id
     const id = response.data.name;
     return id;
@@ -12,7 +11,7 @@ export const storeExpenseHttp = async (expenseData) =>  {
 
 export const fetchExpensesHttp = async (userId) => {
     try {
-        const response = await axios.get(`${URL}/expenses.json?auth`);
+        const response = await axios.get(`${FIREBASE_REALTIME_API}/expenses.json?auth`);
         const expenses = [];
         const currUserExpenses = [];
 
@@ -41,13 +40,13 @@ export const fetchExpensesHttp = async (userId) => {
 
 export const updateExpenseHttp = (id, expenseData) => {
     return axios.put(
-        `${URL}/expenses/${id}.json`,
+        `${FIREBASE_REALTIME_API}/expenses/${id}.json`,
         expenseData
     );
 }
 
 export const deleteExpenseHttp = (id) => {
     return axios.delete(
-        `${URL}/expenses/${id}.json`
+        `${FIREBASE_REALTIME_API}/expenses/${id}.json`
     );
 }

@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { addExpense, removeExpense, updateExpense } from '../redux/expense_reducers';
@@ -10,7 +10,10 @@ import ExpenseForm from '../components/ManageExpense/ExpenseForm';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 
 // UTIL
-import { storeExpenseHttp, updateExpenseHttp, deleteExpenseHttp } from '../util/http';
+import { storeExpenseHttp, updateExpenseHttp, deleteExpenseHttp, fetchExpensesHttp } from '../util/http';
+
+// Redux 
+import { setExpenses } from '../redux/expense_reducers';
 
 const ManageExpense = ({ route, navigation }) => {
   const [loading, setLoading] = useState(false);
@@ -30,6 +33,17 @@ const ManageExpense = ({ route, navigation }) => {
       title: isEditing ? 'Edit Expense' : 'Add Expense',
     })
   }, []);
+
+  const fetchAllExpenses = async () => {
+    setLoading(true);
+    try {
+      const expenses = await fetchExpensesHttp(currUserId);
+      dispatch(setExpenses(expenses));
+    } catch (err) {
+      console.log(err);
+    }
+    setLoading(false);
+  }
 
   const deleteExpenseHandler = async () => {
     setLoading(true);
@@ -61,6 +75,7 @@ const ManageExpense = ({ route, navigation }) => {
       }))
       try {
         await updateExpenseHttp(editExpenseId, expenseData);
+        fetchAllExpenses();
       } catch(err) {
         setErrorMessage(err);
       }
@@ -79,6 +94,7 @@ const ManageExpense = ({ route, navigation }) => {
           amount: expenseData.amount,
           date: expenseData.date,
         }));
+        fetchAllExpenses();
       } catch (err) {
         setErrorMessage(err);
       }

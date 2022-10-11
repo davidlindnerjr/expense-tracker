@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import ExpensesOutput from '../components/Expenses/ExpensesOutput';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
 
 // util
 import { getDateMinusDays } from '../util/date';
