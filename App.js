@@ -1,4 +1,5 @@
-import { StyleSheet, StatusBar, Alert } from 'react-native';
+import React from 'react';
+import { StyleSheet, StatusBar} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -80,6 +81,7 @@ const AuthStack = () => {
           headerStyle: { backgroundColor: GlobalStyles.colors.background },
           headerTintColor: GlobalStyles.colors.text,
           contentStyle: { backgroundColor: GlobalStyles.colors.background },
+          headerShown: false,
         }}
       >
         <Stack.Screen name="Login" component={LoginScreen} />
