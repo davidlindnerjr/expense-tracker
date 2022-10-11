@@ -1,11 +1,10 @@
 import axios from 'axios';
-
-const API_KEY = 'AIzaSyBP_CNZjreGbL6z3JmLQfOCHu30Imgv6SU';
+import { FIREBASE_AUTH_API } from '@env';
 
 export const createUser = async (email, password) => {
     try {
         const res = await axios.post(
-            `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`,
+            `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${FIREBASE_AUTH_API}`,
             {
                 email: email,
                 password: password,
@@ -24,7 +23,7 @@ export const createUser = async (email, password) => {
 export const loginUser = async (email, password) => {
     try {
         const res = await axios.post(
-            `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`,
+            `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FIREBASE_AUTH_API}`,
             {
                 email: email,
                 password: password,
