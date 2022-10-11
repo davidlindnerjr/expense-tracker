@@ -1,0 +1,35 @@
+{
+  "cli": {
+    "version": ">= 2.3.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "simulator": true
+      },
+      "distribution": "internal"
+    },
+    "production": {
+      "env": {
+        "FIREBASE_AUTH_API": "AIzaSyBP_CNZjreGbL6z3JmLQfOCHu30Imgv6SU",
+        "FIREBASE_REALTIME_API": "https://expense-tracker-ddebb-default-rtdb.firebaseio.com"
+      }
+    },
+    "staging": {
+      "env": {
+        "FIREBASE_AUTH_API": "AIzaSyBP_CNZjreGbL6z3JmLQfOCHu30Imgv6SU",
+        "FIREBASE_REALTIME_API": "https://expense-tracker-ddebb-default-rtdb.firebaseio.com"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
