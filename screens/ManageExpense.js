@@ -51,6 +51,7 @@ const ManageExpense = ({ route, navigation }) => {
     dispatch(removeExpense(editExpenseId));
     try {
       await deleteExpenseHttp(editExpenseId);
+      fetchAllExpenses();
     } catch (err) {
       setErrorMessage(err);
     }
